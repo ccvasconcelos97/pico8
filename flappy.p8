@@ -114,7 +114,6 @@ function init_pipes()
 	gap = 35
  p1bx = 128
 	p1by = 10 + gap + rnd(128 - 20 - gap)
-	score = 0
 	pipe_speed = 1
 end
 
@@ -140,7 +139,7 @@ end
 --- score / collision ---
 
 function init_score()
- score = 0
+ score = 10
 	scored = false
 end
 
@@ -155,7 +154,7 @@ function update_score()
 end
 
 function draw_score()
-	print(score, 122, 2)
+	print(score, 119, 2)
 end
 
 function collide()
