@@ -4,6 +4,7 @@ My pico8 games
 
 ![biacla](biacla.p8.png)
 ![hungry_guinea_pig](hungry_guinea_pig.p8.png)
+![flappy](flappy.p8.png)
 
 ## How to play
 
