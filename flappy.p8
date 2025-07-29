@@ -5,156 +5,151 @@ __lua__
 -- gets faster as you go
 
 function _init()
-	pspr = 1
- px = 56
- py = 50
+  pspr = 1
+  px = 56
+  py = 50
 
- flap = 0
- flap_amount = 6
- flap_strength = 0.5
- gravity = 1.1
+  flap = 0
+  flap_amount = 6
+  flap_strength = 0.5
+  gravity = 1.1
 
- init_pipes()
-	init_score()
+  init_pipes()
+  init_score()
 
-	state = "start"
+  state = "start"
 end
 
 function _update60()
-	if state == "start" then
-  update_start()
-	elseif state == "game" then
-		update_game()
-	elseif state == "game over" then
-		update_game_over()
-	end
+  if state == "start" then
+    update_start()
+  elseif state == "game" then
+    update_game()
+  elseif state == "game over" then
+    update_game_over()
+  end
 end
 
 function _draw()
-	if state == "start" then
-  draw_start()
-	elseif state == "game" then
-		draw_game()
-	elseif state == "game over" then
-		draw_game_over()
-	end
+  if state == "start" then
+    draw_start()
+  elseif state == "game" then
+    draw_game()
+  elseif state == "game over" then
+    draw_game_over()
+  end
 end
 
 function update_game()
- py += gravity
+  py += gravity
 
- if btnp(🅾️) then
-		sfx(0)
-  flap = flap_amount
- end
+  if btnp(🅾️) then
+    sfx(0)
+    flap = flap_amount
+  end
 
- if flap > 0 then
-  flap = flap - flap_strength
-		pspr = 0
-	else
-		pspr = 1
- end
+  if flap > 0 then
+    flap = flap - flap_strength
+    pspr = 0
+  else
+    pspr = 1
+  end
 
- py -= flap
+  py -= flap
 
+  if py >= 121 then
+    py = 121
+  elseif py <= 0 then
+    py = 0
+  end
 
- if py >= 121 then
-  py = 121
- elseif py <= 0 then
-  py = 0
- end
-
-	update_pipes()
-	update_score()
-	collide()
+  update_pipes()
+  update_score()
+  collide()
 end
 
 function draw_game()
-	cls(12)
-	map()
-	draw_pipes()
-	draw_score()
-	spr(pspr, px, py)
+  cls(12)
+  map()
+  draw_pipes()
+  draw_score()
+  spr(pspr, px, py)
 end
 
 function update_start()
-	if btn(🅾️) then
-		music(0)
-		state = "game"
-	end
+  if btn(🅾️) then
+    music(0)
+    state = "game"
+  end
 end
-
 
 function draw_start()
-	cls()
-	map()
-	print("flappy", 48, 60, 1)
-	print("press 🅾️ to start", 30, 68)
+  cls()
+  map()
+  print("flappy", 48, 60, 1)
+  print("press 🅾️ to start", 30, 68)
 end
 
-
 function update_game_over()
-	if btn(❎) then
-		_init()
-	end
+  if btn(❎) then
+    _init()
+  end
 end
 
 function draw_game_over()
-	cls()
-	print("score: ".. score, 48, 60)
-	print("press ❎ to restart", 28, 68)
+  cls()
+  print("score: ".. score, 48, 60)
+  print("press ❎ to restart", 28, 68)
 end
-
 
 -->8
 --- pipes ---
 
-
 function init_pipes()
-	gap = 35
- p1bx = 128
-	p1by = 10 + gap + rnd(128 - 20 - gap)
-	pipe_speed = 1
+  gap = 35
+  p1bx = 128
+  p1by = 10 + gap + rnd(128 - 20 - gap)
+  pipe_speed = 1
 end
 
 function update_pipes()
- p1bx -= pipe_speed
+  p1bx -= pipe_speed
 
-	if p1bx < -16 then
-		p1by = 10 + gap + rnd(128 - 20 - gap)
-		p1bx = 128
-		scored = false
-	end
+  if p1bx < -16 then
+    p1by = 10 + gap + rnd(128 - 20 - gap)
+    p1bx = 128
+    scored = false
+  end
 end
 
 function draw_pipes()
- -- top pipe
- spr(7, p1bx, p1by-128-gap, 2, 16)
+  -- top pipe
+  spr(7, p1bx, p1by-128-gap, 2, 16)
 
-	-- bottom pipe
- spr(7, p1bx, p1by, 2, 16)
+  -- bottom pipe
+  spr(7, p1bx, p1by, 2, 16)
 end
 
 -->8
 --- score / collision ---
 
 function init_score()
- score = 10
-	scored = false
+  score = 0
+  scored = false
 end
 
 function update_score()
-	if not scored and abs(p1bx - px) < 1 then
-		score += 1
-		scored = true
-		if score % 3 == 0 then
-			pipe_speed += 0.1
-		end
-	end
+  if not scored and abs(p1bx - px) < 1 then
+    score += 1
+    scored = true
+    if score % 3 == 0 then
+      pipe_speed += 0.1
+    end
+  end
 end
 
 function draw_score()
-	print(score, 119, 2)
+  print(score, 119, 2)
 end
 
 function collide()
@@ -173,7 +168,7 @@ function collide()
 
     if bird_top < gap_top or bird_bottom > gap_bottom then
       state = "game over"
-						music(-1)
+      music(-1)
     end
   end
 end
